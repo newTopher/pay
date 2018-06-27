@@ -1,0 +1,50 @@
+<?php
+return [
+    'notify_url'=>'http://pay.service.com/pay/notify',
+    'return_url'=>'http://pay.service.com/pay/ret',
+    'notify_url_demo'=>'http://pay.service.com/demo/notify',
+    'return_url_demo'=>'http://pay.service.com/demo/ret',
+    'site_title'=>'wapspay',
+    'site_url'=>'http://pay.service.com',
+    'alipay_pay_type'=>1,
+    'wechat_pay_type'=>2,
+    'pay_type'=>[
+        '1'=>'支付宝',
+        '2'=>'微信'
+    ],
+    'money_change_type'=>[
+        '1'=>'充值',
+        '2'=>'手续费',
+        '3'=>'升级套餐'
+    ],
+    'user_type'=>[
+        '0'=>'超管',
+        '1'=>'普通会员',
+        '2'=>'代理商'
+    ],
+    'api_key'=>'3CScLVCxQw9Pe4jSJe0SrPjOTxs0v9Mk',
+    'pay_default_expire_time'=>300,
+    'qiniu_key'=>'YI7rd1J6RFGMOLxTdEtmzxfg-1R_nMXBpvx1dTql',
+    'qiniu_secret'=>'qRSN_cTLKeQNdwT1kW0Y08yeX4orLP3A9rL6piKq',
+    'qiniu_bucket'=>'bbsuucc',
+    'qiniu_url'=>'http://oscto7dq9.bkt.clouddn.com',
+
+    'baidu_key'=>'21b880b928e14bfaaf4692e8fb791a43',
+    'baidu_app'=>'baeapp-rrjzwhqrrt9c',
+    'baidu_secret'=>'a13258d1dfc749869595a9c5918dff1f',
+    'pay_money_range'=>99,
+
+    'pay_domain'=>[
+        ['http://pay.service.com/pay/index',1]
+    ],
+    'cache_prefix'=>[
+        'pay_request'=>'PAY_REQUEST_'
+    ],
+    'job_delay_time'=>[
+       1=>'30',
+       2=>'60',
+       3=>'120'
+    ],
+    'pay_host'=>'http://pay.service.com'
+
+];

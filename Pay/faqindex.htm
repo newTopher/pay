@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh-cn">
+<!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>PaysApi - 个人支付收款API接口提供商</title>
+		<meta name="language" content="cn" />
+		<meta name="description" content="专为个人收款而生的支付工具。为支付宝、微信支付的个人账户，提供即时到账收款API接口。安全可靠，费率低。">
+
+		<!-- Mobile Meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="images/favicon.ico" >
+
+		<!-- Web Fonts -->
+		
+		 
+
+		<!-- Bootstrap core CSS -->
+		
+		<link href="css/bootstrap.min.css"  rel="stylesheet">
+
+		<!-- Font Awesome CSS -->
+		<link href="css/font-awesome.min.css"  rel="stylesheet">
+
+		<!-- Fontello CSS -->
+		<link href="fonts/fontello/css/fontello.css"  rel="stylesheet">
+		<link href="css/iconfont.css"  rel="stylesheet"> 
+
+		<!-- Plugins -->
+		<link href="css/settings.css"  media="screen" rel="stylesheet">
+		<link href="css/extralayers.css"  media="screen" rel="stylesheet">
+		<link href="css/magnific-popup.min.css"  rel="stylesheet">
+		<link href="css/animations.css"  rel="stylesheet">
+		<link href="css/owl.carousel.min.css"  rel="stylesheet">
+		<link href="css/toastr.min.css"  rel="stylesheet">
+		
+		<link href="css/style.css"  rel="stylesheet">
+
+		<!-- Color Scheme (In order to change the color scheme, replace the red.css with the color scheme that you prefer)-->
+		<link href="css//green.css"  rel="stylesheet">
+
+		<!-- Custom css --> 
+		<link href="css/custom.css"  rel="stylesheet">
+		<!-- <link href="/css/custom.css" rel="stylesheet"> -->
+		<!--[if lt IE 9]-->
+		<script type="text/javascript"  src="js/html5shiv.js" ></script >
+		<script type="text/javascript" src="js/selectivizr.js" ></script>
+		<!--[endif]-- > 
+
+		<!--Google转化统计-->
+		<!-- Global site tag (gtag.js) - Google AdWords: 851025988 
+		<script async src="https://www.googletagmanager.com/gtag/js?id=AW-851025988"></script>
+		-->
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'AW-851025988');
+		</script>
+
+		<!-- Event snippet for PaysApi注册转化 conversion page
+		In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+		<script>
+			function gtag_report_conversion(url) {
+				var callback = function () {
+					if (typeof(url) != 'undefined') {
+					window.location = url;
+					}
+				};
+				gtag('event', 'conversion', {
+					'send_to': 'AW-851025988/2xgJCM_w3HoQxMDmlQM',
+					'event_callback': callback
+				});
+				return false;
+			}
+		</script>
+
+			
+		
+	</head>
+
+	<!-- body classes: 
+			"boxed": boxed layout mode e.g. <body class="boxed">
+			"pattern-1 ... pattern-9": background patterns for boxed layout mode e.g. <body class="boxed pattern-1"> 
+	-->
+	<body class="front">
+		<!-- scrollToTop -->
+		<!-- ================ -->
+		<div class="scrollToTop"><i class="icon-up-open-big"></i></div>
+
+		<!-- page wrapper start -->
+		<!-- ================ -->
+		<div class="page-wrapper">
+
+			<!-- header-top start -->
+			<!-- ================ -->
+			
+			
+			<div class="header-top">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-2 col-sm-6">
+
+							<!-- header-top-first start -->
+							<!-- ================ -->
+							<div class="header-top-first clearfix">
+								<ul class="social-links clearfix hidden-xs">
+									<li class="qq"><a href="#footer"><i class="fa fa-qq"></i></a></li>
+									<li class="weixin"><a href="#footer"><i class="fa fa-weixin"></i></a></li>
+								</ul>
+								<div class="social-links hidden-lg hidden-md hidden-sm">
+									<div class="btn-group dropdown">
+										<button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-share-alt"></i></button>
+										<ul class="dropdown-menu dropdown-animation">
+											<li class="qq"><a target="_blank" href="#footer"><i class="fa fa-qq"></i></a></li>
+											<li class="weixin"><a target="_blank" href="#footer"><i class="fa fa-weixin"></i></a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- header-top-first end -->
+
+						</div>
+						<div class="col-xs-10 col-sm-6">
+
+							<!-- header-top-second start -->
+							<!-- ================ -->
+							<div id="header-top-second"  class="clearfix">
+
+								<!-- header top dropdowns start -->
+								<!-- ================ -->
+								<div class="header-top-dropdown">
+									
+									<div class="btn-group dropdown">
+																				<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" id="btnlogin"><i class="fa fa-user"></i> 登录</button>
+										<ul class="dropdown-menu dropdown-menu-right dropdown-animation">
+											<li>
+												<form class="form" role="form" id="loginform">
+													<div class="form-group has-feedback">
+														<label class="control-label">用户名</label>
+														<input id="loginEmail" type="email" name="loginEmail" class="form-control" placeholder="电子邮箱" required>
+														<i class="fa fa-user form-control-feedback"></i>
+													</div>
+													<div class="form-group has-feedback">
+														<label class="control-label">密码</label>
+														<input type="password" id="loginPassword" name="loginPassword" class="form-control" minlength="8" placeholder="密码至少8位" required>
+														<i class="fa fa-lock form-control-feedback"></i>
+													</div>
+													<button id="loginBtn" type="button" class="btn btn-group btn-dark btn-sm">登录</button>
+													<span>或</span>
+													<a href="register.htm"  class="btn btn-default btn-sm">注册</a>
+													<ul>
+														<li><a href="forgetPassword.htm" >忘记密码</a></li>
+													</ul>
+													
+												</form>
+											</li>
+										</ul>
+																				
+										
+									</div>
+									<div class="btn-group dropdown">
+										<button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-search"></i> 搜索</button>
+										<ul class="dropdown-menu dropdown-menu-right dropdown-animation">
+											<li>
+												<form role="search" class="search-box">
+													<div class="form-group has-feedback">
+														<input type="text" class="form-control" placeholder="Search">
+														<i class="fa fa-search form-control-feedback"></i>
+													</div>
+												</form>
+											</li>
+										</ul>
+									</div>
+									
+
+								</div>
+								<!--  header top dropdowns end -->
+
+							</div>
+							<!-- header-top-second end -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- header-top end -->
+
+			<!-- header start (remove fixed class from header in order to disable fixed navigation mode) -->
+			<!-- ================ --> 
+			<header class="header fixed clearfix">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+
+							<!-- header-left start -->
+							<!-- ================ -->
+							<div class="header-left clearfix">
+
+								<!-- logo -->
+								<div class="logo">
+									<a href="index.html" ><img id="logo" src="images/logo_red.png"  alt="PaysApi"></a>
+								</div>
+
+								<!-- name-and-slogan -->
+								<div class="site-slogan">
+									个人支付收款API接口提供商
+								</div>
+
+							</div>
+							<!-- header-left end -->
+
+						</div>
+                        
+						<div class="col-md-9">
+
+							<!-- header-right start -->
+							<!-- ================ -->
+							<div class="header-right clearfix">
+								
+								<!-- main-navigation start -->
+								<!-- ================ -->
+								<div class="main-navigation animated">
+
+									<!-- navbar start -->
+									<!-- ================ -->
+									<nav class="navbar navbar-default" role="navigation">
+										<div class="container-fluid">
+
+											<!-- Toggle get grouped for better mobile display -->
+											<div class="navbar-header">
+												<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+													<span class="sr-only">Toggle navigation</span>
+													<span class="icon-bar"></span>
+													<span class="icon-bar"></span>
+													<span class="icon-bar"></span>
+												</button>
+											</div>
+
+											<!-- Collect the nav links, forms, and other content for toggling -->
+											<div class="collapse navbar-collapse scrollspy smooth-scroll" id="navbar-collapse-1">
+												<ul class="nav navbar-nav navbar-right">
+													<li><a href="index.htm" >首页</a></li>
+													
+													<li class="dropdown active">
+														<a href="#header-top" class="dropdown-toggle" data-toggle="dropdown">新手引导</a>
+														<ul class="dropdown-menu">
+															<li class="active"><a href="register.htm" >免费注册</a></li>
+															<li><a href="appdownload.htm" >安装APP</a></li>
+															<li><a href="docindex.htm" >看API文档自助接入</a></li>
+															<li><a href="faqindex-selectid=collapse7.htm" >不懂接入？我们帮您</a></li>
+														</ul>
+													</li>
+													<li class="dropdown">
+														<a href="#header-top" class="dropdown-toggle" data-toggle="dropdown">API接入文档</a>
+														<ul class="dropdown-menu">
+															<li><a href="docindex.htm" >准备工作</a></li>
+															<li><a href="docpay.htm" >发起付款接口</a></li>
+															<li><a href="docdemo.htm" >Demo下载</a></li>
+														</ul>
+													</li>
+													<li class="dropdown">
+														<a href="#header-top" class="dropdown-toggle" data-toggle="dropdown">帮助</a>
+														<ul class="dropdown-menu">
+															<li><a href="faqindex.htm" >接入常见问题</a></li>
+															<li><a href="faqused.htm" >使用过程中常见问题</a></li>
+														</ul>
+													</li>
+													<li><a href="appdownload.htm" >APP下载</a></li>
+																										<li><a href="about.htm" >关于我们</a></li>
+																										
+												</ul>
+											</div>
+
+										</div>
+									</nav>
+									<!-- navbar end -->
+
+								</div>
+								<!-- main-navigation end -->
+
+							</div>
+							<!-- header-right end -->
+
+						</div>
+					</div>
+				</div>
+			</header>
+            <!-- header end -->
+            <!-- main start -->
+            
+			<!-- page-intro start-->
+			<!-- ================ -->
+			<div class="page-intro">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<ol class="breadcrumb">
+								<li><i class="fa fa-home pr-10"></i><a href="index.htm" >首页</a></li>
+								<li class="active">常见问题解答</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- page-intro end -->
+<!-- main-container start -->
+			<!-- ================ -->
+			<section class="main-container">
+                    
+                <div class="container">
+                    <div class="row">
+
+                        <!-- sidebar start -->
+                        <aside class="col-md-3">
+                            <div class="sidebar">
+                                <div class="block clearfix">
+                                    <h3 class="title">常见问题解答</h3>
+                                    <div class="separator"></div>
+                                    <nav>
+                                        <ul class="nav nav-pills nav-stacked">
+                                            <li class="active"><a href="faqindex.htm" >接入问题</a></li>
+                                            <li><a href="faqused.htm" >使用过程中问题</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </aside>
+                        <!-- sidebar end -->
+
+                        <!-- main start -->
+						<!-- ================ -->
+						<div class="main col-md-9">
+                            
+                            <!-- page-title start -->
+                            <!-- ================ -->
+                            <h4 class="page-title">常见接入问题解答</h4>
+                            <hr><!-- page-title end -->
+
+                            <!-- accordion start -->
+                            <div class="panel-group panel-transparent" id="accordion-faq">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapseOne" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 接入PaysApi后，我的支付宝微信账号是否安全？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>非常安全。懂一点安卓技术的同学都知道，我们应用没有要求Root权限，也不需要在App中输入支付宝、微信的账号密码。所以我们从物理上就不存在获取您支付宝、微信账号密码、盗取秘钥的可能。</p>
+                                            <p>同时，我们强烈建议：不要在非官方App、官网以外的任何网站、APP中输入账号密码，否则极可能账号被盗、资金丢失。</p>
+                                            <p>我们强烈建议您不要Root手机，有Root权限的App，可以拿到您支付宝微信支付的秘钥，随意生成二维码，非常危险。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapseTwo" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> PaysApi的“你敢用，我敢赔”保障金是什么？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>敢赔保证金是我们提供给大家的另一重保障。</p>
+                                            <p>因为我们对我们的安全非常自信。所以我们敢做出承诺：保证整个支付流程安全、您支付宝微信账号密码安全。只要是因为PaysApi导致的账号被盗、资金丢失的情况，我们一律按承诺赔偿。</p>
+                                            <p>您网站因自身安全问题导致的损失不在赔偿范围内，不过如遇到此情况，请联系我们客服。我们会第一时间处理并尽可能帮您挽回损失。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapseThree" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 使用PaysApi会不会导致我支付宝、微信账号被封号？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>不会。因为用PaysApi的商户的支付宝微信账户和普通个人账号没有任何区别。</p>
+                                            <p>我们既不会不断刷新您的支付宝后台，也不存在任何可能拿到您账号密码，异地登录等异常行为，更做不到模拟支付宝微信App和支付宝微信服务端交互。</p>
+                                            <p>我们把可能会给您账号带来风险的因素都考虑到了，所以使用PaysApi是安全的。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapse4" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 用户付款是经过网站账号中转，还是直接付款到我自己的支付宝微信账号？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse4" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>是直接付款到您支付宝微信账号的。您在网站首页体验的流程就是未来您用户付费的流程，在您接入后，您的用户是直接扫描您的二维码付款的。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapse5" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 用户直接付款到我账户，你们平台怎么扣手续费？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse5" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>您需要在后台充值一些余额。不用多，够支付手续费的就可以。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapse6" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 为什么一定要安装App？如果我没运行App，会有什么后果？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse6" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>如果您手机App未运行，用户依然会付款给您，钱依然会直接到您支付宝微信余额中，但是就不会有回调了。用户会来找您并提供付款截图，您确认后，可以在我们APP的订单后台，根据接口传入的用户名，订单号，支付金额找到对应订单，并点击“我已收款”，系统会立即通知到您的回调接口。好消息是：手动收款是免手续费的。</p>
+                                            <p>我们强烈建议您用一台旧手机安装上我们的App放在家里的wifi环境中，并保持永不锁屏，一直充电的状态。如遇到微信支付宝不通知或者延迟，请看这里的<a href="faqused-selectid=collapse5.htm" >解决方案</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapseFour" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 安装手机App后，需要做哪些设置？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>1.需要登录PaysApi账号。</p>
+                                            <p>2.其他设置项，<a href="app_miui.htm" >请看这里</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                                              
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapse7" id="collapse7title" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 我不懂技术，也找不到人帮我接入，怎么办？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse7" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>联系客服，客服帮您找人接入，根据您的接入工作量复杂程度，会收取800-1200左右的接入费用。</p>
+                                            <p>或者您可以自行在猪八戒等威客网站找团队接入。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion-faq" href="#collapse8" class="collapsed">
+                                                <i class="fa fa-question-circle pr-10"></i> 支付页是否可以自定义界面？
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse8" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <p>可以。如果您设计的支付页很棒，您可以自己设计制作支付页模板，做成HTML页后联系客服，客服审核通过后由我们研发制作成通用模板上架。不过您得同意上架的模板需无偿提供给所有商户供选择使用。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- accordion end -->
+                            
+                        </div>
+                        <!-- main end -->
+                            
+                        
+                    </div>
+                </div>
+            </section>
+            <!-- main-container end -->
+
+
+
+            <!-- main end -->
+			<!-- footer start (Add "light" class to #footer in order to enable light footer) -->
+			<!-- ================ -->
+			<footer id="footer">
+
+				<!-- .footer start -->
+				<!-- ================ -->
+				<div class="footer">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="footer-content">
+									<div class="logo-footer"><img id="logo-footer" src="images/logo_red_footer.png"  alt=""></div>
+									<div class="row">
+										<div class="col-sm-6">
+											<p>专为个人收款而生的支付工具。为支付宝、微信支付的个人账户，提供即时到账收款API接口。安全可靠，费率低。</p>
+											<ul class="social-links circle">
+												<li class="facebook"><a target="_blank" href="javascript:if(confirm(%27http://wpa.qq.com/msgrd?v=3&uin=2483995328&site=qq&menu=yes  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://wpa.qq.com/msgrd?v=3&uin=2483995328&site=qq&menu=yes%27" ><i class="fa fa-qq"></i></a></li>
+												<li class="twitter"><a href="#"><i class="fa fa-weixin"></i></a></li>
+											</ul>
+										</div>
+										<div class="col-sm-6 contactlist">
+											<ul class="list-icons">
+												<li><i class="fa fa-qq pr-10"></i> 售前：<a target="_blank" href="javascript:if(confirm(%27https://wpa.qq.com/msgrd?v=3&uin=2483995328&site=qq&menu=yes  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://wpa.qq.com/msgrd?v=3&uin=2483995328&site=qq&menu=yes%27" ><img border="0" style="display: inline;"  src="images/button_111.gif.jpg"  alt="点击这里给我发消息" title="点击这里给我发消息"/></a> <a target="_blank" href="javascript:if(confirm(%27https://wpa.qq.com/msgrd?v=3&uin=3208824402&site=qq&menu=yes  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://wpa.qq.com/msgrd?v=3&uin=3208824402&site=qq&menu=yes%27" ><img border="0" style="display: inline;"  src="images/button_111.gif.jpg"  alt="点击这里给我发消息" title="点击这里给我发消息"/></a></li>
+												<li><i class="fa fa-qq pr-10"></i> 技术：<a target="_blank" href="javascript:if(confirm(%27https://wpa.qq.com/msgrd?v=3&uin=1957069424&site=qq&menu=yes  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://wpa.qq.com/msgrd?v=3&uin=1957069424&site=qq&menu=yes%27" ><img border="0" style="display: inline;"  src="images/button_111.gif.jpg"  alt="点击这里给我发消息" title="点击这里给我发消息"/></a></li>
+												<li><i class="fa fa-weixin pr-10"></i> paysapi</li>
+												<li><i class="fa fa-phone pr-10"></i> 19973609384(<a href="#" class="pt-popover" data-toggle="popover" data-placement="right" data-content="安全性问题，例如：账号被盗无法找回，您网站被黑客入侵导致接口参数被篡改，请第一时间联系我们。" title="" data-original-title="什么是紧急情况？">紧急情况</a>拨打) </li>
+												<li><i class="fa fa-envelope-o pr-10"></i> 举报：jubao@aimobo.com</li>
+											</ul>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							<div class="space-bottom hidden-lg hidden-xs"></div>
+							<div class="col-sm-6 col-md-2">
+								<div class="footer-content">
+									<h2>链接</h2>
+									<nav>
+										<ul class="nav nav-pills nav-stacked">
+											<li><a href="index.htm" >首页</a></li>
+											<li class="active"><a href="docindex.htm" >API文档</a></li>
+											<li><a href="faqindex.htm" >帮助</a></li>
+											<li><a href="appdownload.htm" >软件下载</a></li>
+											<li><a href="about.htm" >关于我们</a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-3 col-md-offset-1">
+								<div class="footer-content">
+									<h2>合作伙伴</h2>
+									<div class="gallery row">
+										
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_alipay.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://www.alipay.com/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://www.alipay.com/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_wxpay.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://pay.weixin.qq.com/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://pay.weixin.qq.com/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_tencentcloud.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=15fdd140e8b2e550e42483d213bba67e  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=15fdd140e8b2e550e42483d213bba67e%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_ksyun.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://dami.ksyun.com/activity/cloud-activity.html?sellerCode=AaIWyu33  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://dami.ksyun.com/activity/cloud-activity.html?sellerCode=AaIWyu33%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>										
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_aliyun.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=lv2mcpd7&utm_source=lv2mcpd7  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=lv2mcpd7&utm_source=lv2mcpd7%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_baiduai.jpg"  alt="">
+												<a href="javascript:if(confirm(%27http://ai.baidu.com/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://ai.baidu.com/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_qiniu.jpg"  alt="">
+												<a href="javascript:if(confirm(%27https://www.qiniu.com/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27https://www.qiniu.com/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_thinkphp.jpg"  alt="">
+												<a href="javascript:if(confirm(%27http://www.thinkphp.cn/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.thinkphp.cn/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+										<div class="gallery-item col-xs-4">
+											<div class="overlay-container">
+												<img src="images/partner_wwei.jpg"  alt="">
+												<a href="javascript:if(confirm(%27http://www.wwei.cn/  \n\nThis file was not retrieved by Teleport Ultra, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.wwei.cn/%27"  class="overlay small">
+													<i class="fa fa-link"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="space-bottom hidden-lg hidden-xs"></div>
+					</div>
+				</div>
+				<!-- .footer end -->
+
+				<!-- .subfooter start -->
+				<!-- ================ -->
+				<div class="subfooter">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<p>Copyright &copy; 2017-2018. Aimobo Inc. All rights reserved.
+</p>
+							</div>
+							<div class="col-md-6">
+								<nav class="navbar navbar-default" role="navigation">
+									<!-- Toggle get grouped for better mobile display -->
+									<div class="navbar-header">
+										<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-2">
+											<span class="sr-only">Toggle navigation</span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+										</button>
+									</div>   
+									<div class="collapse navbar-collapse" id="navbar-collapse-2">
+										<ul class="nav navbar-nav">
+											<li><a href="index.htm" >首页</a></li>
+											<li><a href="docindex.htm" >API文档</a></li>
+											<li><a href="faqindex.htm" >帮助</a></li>
+											<li><a href="appdownload.htm" >软件下载</a></li>
+											<li><a href="about.htm" >关于我们</a></li>
+										</ul>
+									</div>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- .subfooter end -->
+
+			</footer>
+			<!-- footer end -->
+
+		</div>
+		<!-- page-wrapper end -->
+
+		<!-- JavaScript files placed at the end of the document so the pages load faster
+		================================================== -->
+		<!-- Jquery and Bootstap core js files -->
+		<script type="text/javascript" src="js/jquery.min.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+		<!-- Modernizr javascript -->
+		<script type="text/javascript" src="js/modernizr.min.js" ></script>
+
+		<!-- jQuery REVOLUTION Slider  -->
+		<script type="text/javascript" src="js/jquery.themepunch.tools.min.js" ></script>
+		<script type="text/javascript" src="js/jquery.themepunch.revolution.min.js" ></script>
+
+		<!-- Isotope javascript -->
+		<script type="text/javascript" src="js/isotope.pkgd.min.js" ></script>
+
+		<!-- Owl carousel javascript -->
+		<script type="text/javascript" src="js/owl.carousel.js" ></script>
+
+		<!-- Magnific Popup javascript -->
+		<script type="text/javascript" src="js/jquery.magnific-popup.min.js" ></script>
+
+		<!-- Appear javascript -->
+		<script type="text/javascript" src="js/jquery.appear.js" ></script>
+
+		<!-- Count To javascript -->
+		<script type="text/javascript" src="js/jquery.countTo.js" ></script>
+
+		<!-- Parallax javascript -->
+		<script src="js/jquery-parallax.js" ></script>
+
+		<!-- Contact form -->
+		<script src="js/jquery.validate.js" ></script>
+		<script src="js/messages_zh.js" ></script>
+
+		<!-- Toastr -->
+		<script src="js/toastr.min.js" ></script>
+
+		<!-- Initialization of Plugins -->
+		<script type="text/javascript" src="js/template.js" ></script>
+
+		<!-- Custom Scripts -->
+		<!-- <script type="text/javascript" src="js/custom.js"></script>-->
+		<script type="text/javascript" src="js/custom.js" ></script>
+		<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "js/hm.js-ca69aec66f867486468c7731605b365d.js"/*tpa=js/hm.js?ca69aec66f867486468c7731605b365d*/;
+			var s = document.getElementsByTagName("script")[0]; 
+			s.parentNode.insertBefore(hm, s);
+		})();
+
+		$("#loginPassword").keyup(function(event){
+		if(event.keyCode ==13){
+			$("#loginBtn").trigger("click");
+		}
+		});
+
+
+
+		</script>
+			
+		
+		
+
+<script type="text/javascript">
+	//获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    
+    $().ready(function(){
+        var selectid = getUrlParam('selectid');
+        if (selectid == "collapse7"){
+            $("#collapse7title").removeClass("collapsed");
+            $("#collapse7").addClass("in");
+        }else if (selectid == "collapseFive"){
+            $("#collapseFivetitle").removeClass("collapsed");
+            $("#collapseFive").addClass("in");
+        }
+	});
+</script>
+
+
+	</body>
+</html>

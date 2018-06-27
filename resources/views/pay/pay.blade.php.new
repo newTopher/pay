@@ -1,0 +1,933 @@
+<html>
+<head lang="en">
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta name="apple-mobile-web-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>快捷支付</title>
+    <link href="//midas.gtimg.cn/c/=/midash5/css/pay_business/theme/hlw.css,/midash5/css/payment-method.css?v=20180129001&amp;max_age=31104000" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .body-container{
+            max-width: 800px;
+            margin: 0px auto;
+        }
+        .label{
+            line-height: 38px;
+        }
+        .controls-option-tap .label span{
+            font-size: 15px;
+            color: black;
+        }
+        .qrcode-img-wrapper{
+            width: 100%;
+            text-align: center;
+        }
+        .self_money_btn{
+            float: right;
+            color: #00a2ea;
+        }
+        .self_money_btn img{
+            width: 15px;
+            line-height: 15px;
+            padding: 3px 2px 0px 0px;
+        }
+        .controls-option-tap .label{
+            padding: 6px 2px 4px;
+        }
+        .topbar{
+            padding: 6px 0px;
+            border-bottom: 1px solid #e8e8e8;
+            margin-bottom: 15px;
+            height: 62px;
+        }
+        .topbar img{
+            width: 146px;
+        }
+        .controls-option-tap li{
+            min-height: 40px;
+        }
+        .float-cont .select_box{
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body class="full-body">
+<div id="wrap" class="body-container">
+    <section data-reactroot="" class="container-wrap ">
+        <div class="container">
+            <div class="topbar">
+                <h1><img src="{{ \Illuminate\Support\Facades\URL::asset('/pay_source/logo_alipay.jpg') }}" width="100%" /></h1>
+            </div>
+            <div class="float-cont field-divice">
+                {{--<div class="control-group ">--}}
+                    {{--<div class="controls">--}}
+                        {{--<input type="tel" placeholder="请输入开通QQ号" maxlength="12" pattern="[0-9]*" />--}}
+                        {{--<div class="qq-name">--}}
+                            {{--<!-- react-text: 13 -->Topher--}}
+                            {{--<!-- /react-text -->--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="turn-right">--}}
+                        {{--<i class="iconfont icon-friend"></i>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                <!-- react-empty: 16 -->
+                <div class="row select_box">
+                    <h2 class="tit">快捷选择<span class="fpm-txt" style="line-height: 0;">（该方式到账速度快）</span> <span class="self_money_btn">
+                            <img src="{{ \Illuminate\Support\Facades\URL::asset('/pay_source/switch_btn.png') }}">自定义金额</span>
+                    </h2>
+                    <ul class="controls-option-tap cf">
+                        <li class="">
+                            <div class="label" style="display: block;">
+                                <span>100000元</span>
+                            </div></li>
+                        <li class="current">
+                            <div class="label" style="display: block;">
+                                <span>2000元</span>
+                            </div></li>
+                        <li class="">
+                            <div class="label" style="display: block;">
+                                <span>5000元</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="label" style="display: block;">
+                                <span>300元</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+                    <div data-role="qrPayImg" class="qrcode-img-area">
+                        <div class="ui-loading qrcode-loading" data-role="qrPayImgLoading" style="display: none;"></div>
+                        <div style="position: relative;display: inline-block;">
+                            <img  id="show_qrcode" width="320" src="https://pan.baidu.com/share/qrcode?w=210&h=210&url={{$data['qrstr']}}" style="display: block;">
+                            @if($data['pay_type'] == 1)
+                                <img onclick="$('#use').hide()" id="use" src="@if($api_config['view_logo']){{ \Illuminate\Support\Facades\Config::get('global.qiniu_url')."/".$api_config['view_logo'] }}@else{{ \Illuminate\Support\Facades\URL::asset('/pay_source/logo_alipay.png') }}@endif"
+                                     style="position: absolute;top: 50%;left: 50%;width:32px;height:32px;margin-left: -16px;margin-top: -20px;border-radius: 50%;">
+                            @endif
+                            @if($data['pay_type'] == 2)
+                                <img onclick="$('#use').hide()" id="use" src="@if($api_config['view_logo']){{ \Illuminate\Support\Facades\Config::get('global.qiniu_url')."/".$api_config['view_logo'] }}@else{{ \Illuminate\Support\Facades\URL::asset('/pay_source/logo_weixin.png') }}@endif"
+                                     style="position: absolute;top: 50%;left: 50%;width:32px;height:32px;margin-left: -16px;margin-top: -20px;border-radius: 50%;">
+                            @endif
+
+                            <div id="qrcode" style = "display: none;"></div>
+                            <canvas id="imgCanvas" width="310" height="270" style = "display: none;"></canvas>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="time-item" style = "padding-top: 10px">
+                    @if($api_config['view_company'])
+                        <div class="time-item" id="view_company"><h1>收款方:{{$api_config['view_company']}}</h1> </div>
+                    @endif
+                    <div class="time-item" id="msg"><h1>付款即时到账 未到账可联系我们</h1> </div>
+                    <div class="time-item"><h1>订单:{{$data['order_id']}}</h1> </div>
+                    <strong id="hour_show">0时</strong>
+                    <strong id="minute_show">0分</strong>
+                    <strong id="second_show">0秒</strong>
+                </div>
+
+            </div>
+            {{--<div class="btn-wrap">--}}
+                {{--<button class="btn btn-primary">立即开通</button>--}}
+            {{--</div>--}}
+        </div>
+    </section>
+</div>
+<div style="display:none">
+    ﻿
+    <span><input type="hidden" name="flag" id="flag" value="1" /> <input type="hidden" name="loginUin" id="loginUin" value="575956381" /><input type="hidden" name="priUin" id="priUin" value="575956381" /><input type="hidden" name="loginNickName" id="loginNickName" value="Topher (575956381)" /><input type="hidden" name="escapeNickName" id="escapeNickName" value="Topher (575956381)" /> <font color="#1D57BB">欢迎您，Topher (575956381)</font>&nbsp;&nbsp;<a id="logout" href="/cgi-bin/login/user_logout.cgi" target="_self">退出</a><script type="text/javascript">var LOGIN_UIN="575956381";var setLogoutUrl=function(url)
+            { var url=url||window.location.href.replace(/[;<>\(\)\'\"]/g,""); document.getElementById("logout").href = "/cgi-bin/login/user_logout.cgi?url=" + encodeURI(url);}</script> </span>
+</div>
+<script type="text/javascript">
+    var _configs = null;
+</script>
+<script type="text/javascript">
+    window._SERVER_DATA = {
+        month_info : {"ret":0,"err_code":"","msg":"","info":{"offer_name":"\u9ec4\u94bb\u8d35\u65cf\u8c6a\u534e\u7248","offer_id":"1450000176","service_name":"","count":"3","is_update":"","rate":"1500","auto_rate":"0","continuous_rate":"0","unit_product":"","tips":"","hf_amt_allow":[],"hf_amt_show_info":"","channel":[{"name":"qqwallet","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":95,"info":""},{"name":"wechat","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":95,"info":""},{"name":"qdqb","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":"17Q\u70b9"},{"name":"hfpay","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":""},{"name":"qqcard","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":""},{"name":"mcard","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":""},{"name":"cft_app","channelname":"","logo_url":"","sub_channel":"0","state":0,"discount":100,"info":""}],"is_use_newmpaymode":0,"mcard_balance":0,"recommend_list":[3,6,9,12],"default_channel":"qqwallet","express_channel":"qqwallet","is_change_key":"0","is_report":"1","is_zy":1,"session_token":"A4638FF1EE7B5A48B06A95DF6061D59E05551","is_kj":"1","is_cft_user":"1","wc_bind_qq":"1","qq_acct_balance":"170","show_channel":[{"name":"qqwallet","channelname":"","logo_url":"","discount":95,"info":""},{"name":"wechat","channelname":"","logo_url":"","discount":95,"info":""}],"qqacct_save_channel":[{"name":"qqwallet","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":95,"info":""},{"name":"wechat","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":95,"info":""},{"name":"qqcard","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":""},{"name":"mcard","channelname":"","logo_url":"","sub_channel":"*","state":0,"discount":100,"info":""}],"user_msg":"","friends_list":[],"user_info":{"uin":"3E2A07EAB09DEA1E2A93680589220901","uin_type":"uin","uin_len":9,"codeindex":2},"update":{"xxjzgw":"1528103736","xxjzsj":"1528103736"},"now":"1528103736","service_list":[],"mp_info":[],"service_update":{"update_months":"0","update_price":"0"},"packet_list":[{"service_code":"XXJZGW","service_name":"\u9ec4\u94bb\u8d35\u65cf","unit_price":1000},{"service_code":"XXJZSJ","service_name":"\u9ec4\u94bb\u8d35\u65cf\u8c6a\u534e\u7248","unit_price":500}],"comm_config":{"mqq_appid":"1450000176"},"month_type":1,"product":[],"inner_product_name":"","inner_product_logourl":"","inner_product_desc":"","is_allow_change":"0","html5_back_url":"","mb_info":{"sms_info":"","remain":"","mburl":"","mb_only_sms":""},"coupons_info":[],"wechat_sign_tips":[],"service_code":"XXJZGHH","out_trade_no":"EXCHANGE5801C438BD337DE035F579C535F0D66A05551","is_continues_month_recomm":"0"}},
+        configs : null,
+        session : {"openid":575956381,"openkey":"@KERCmhGe0","session_id":"uin","session_type":"skey"},
+        month_info_time : 412,
+        server_time : new Date('Monday, 04-Jun-2018 09:15:36 GMT')
+    };
+</script>
+<script>var BJ_REPORT=function(e){if(e.BJ_REPORT)return e.BJ_REPORT;var r=[],n={},t={id:0,pid:0,uin:0,url:"//badjs.vip.qq.com/badjs",combo:1,ext:null,level:4,ignore:[],random:0,delay:100,submit:null,repeat:1,pvrandom:0,errrandom:0,furl:"0"},o=2,i=0,a=function(e,r){return Object.prototype.toString.call(e)==="[object "+(r||"Object")+"]"},u=function(e){var r=typeof e;return"object"===r&&!!e},c=function(e){return null===e||!a(e,"Number")&&!e},s=e.onerror;e.onerror=function(r,n,t,o,u){if(r.length>2e3)var c=r.substr(0,2e3);else var c=r;i++,u&&u.stack&&(c=d(u)),a(c,"Event")&&(c+=c.type?"--"+c.type+"--"+(c.target?c.target.tagName+"::"+c.target.src:""):""),y.push({msg:c,target:n,rowNum:t,colNum:o}),j(),s&&s.apply(e,arguments)};var f=function(e){try{if(e.stack){var r=e.stack.match("https?://[^\n]+");r=r?r[0]:"";var n=r.match(":(\\d+):(\\d+)");n||(n=[0,0,0]);var t=d(e);return{msg:t,rowNum:n[1],colNum:n[2],target:r.replace(n[0],"")}}return e.name&&e.message&&e.description?{msg:JSON.stringify(e)}:e}catch(o){return e}},d=function(e){var r=e.stack.replace(/\n/gi,"").split(/\bat\b/).slice(0,9).join("@").replace(/\?[^:]+/gi,""),n=e.toString();return r.indexOf(n)<0&&(r=n+"@"+r),r},p=function(e,r){var n=[],o=[],i=[];if(u(e)){e.level=e.level||t.level;for(var a in e){var s=e[a];if(!c(s)){if(u(s))try{s=JSON.stringify(s)}catch(f){s="[BJ_REPORT detect value stringify error] "+f.toString()}i.push(a+":"+s),n.push(a+"="+encodeURIComponent(s)),o.push(a+"["+r+"]="+encodeURIComponent(s))}}}return[o.join("&"),i.join(","),n.join("&")]},l=[],m=function(e){var r=new RegExp("badjspv");if(r.test(e)||(e=g(e)),t.submit)t.submit(e);else{var n=new Image;l.push(n),n.src=e}},v=function(){var e=!1,r=new RegExp("debug=1"),n=new RegExp("badjs=1");n.test(document.cookie)&&(e=!0),(n.test(document.location.href)||r.test(document.location.href))&&(e=!0);var t=navigator.userAgent.toLowerCase();return/sq\_[\d\.]+\_\d+\_hdb/.test(t)&&(e=!0),e},g=function(e){return e+="&ic="+i,v()&&(e+="&ig=1"),e},h=function(e){if(!u(e))return!0;var r=e.msg,o=n[r]=(parseInt(n[r],10)||0)+1;return o>t.repeat},R=[],b=0,j=function(e){if(t.report){for(;r.length;){var n=!1,o=r.shift();if(!h(o)){var i=p(o,R.length);if(a(t.ignore,"Array"))for(var u=0,c=t.ignore.length;u<c;u++){var s=t.ignore[u];if(a(s,"RegExp")&&s.test(i[1])||a(s,"Function")&&s(o,i[1])){n=!0;break}}n||(t.combo?R.push(i[0]):m(t.report+i[2]+"&_t="+ +new Date),t.onReport&&t.onReport(t.id,o))}}var f=R.length;if(f){var d=function(){clearTimeout(b),m(t.report+R.join("&")+"&count="+R.length+"&_t="+ +new Date),b=0,R=[]};e?d():b||(b=setTimeout(d,t.delay))}}},y={push:function(e){if(1===t.random||v());else{var n=Math.round(9*Math.random()+1);if(0===t.errrandom){if(9!=n)return y}else{var o=10*t.errrandom/10;if(o>=1||t.errrandom<.1);else{for(var i=10*t.errrandom,a=[],c=1;c<=i;c++)a.push(c);if(!_(n,a))return y}}}var s=u(e)?f(e):{msg:e};return t.ext&&!s.ext&&(s.ext=t.ext),r.push(s),j(),y},report:function(e){return e&&y.push(e),j(!0),y},info:function(e){return e?(u(e)?e.level=2:e={msg:e,level:2},y.push(e),y):y},debug:function(e){return e?(u(e)?e.level=1:e={msg:e,level:1},y.push(e),y):y},init:function(e){if(u(e))for(var n in e)t[n]=e[n];var i=parseInt(t.id,10);return i&&(w(),/qq\.com$/gi.test(location.hostname)&&(t.url||(t.url="//badjs.vip.qq.com/badjs"),t.uin||(t.uin=parseInt((document.cookie.match(/\buin=\D+(\d+)/)||[])[1],10))),t.report=(t.url||"/badjs")+"?id="+i+"&pid="+t.pid+"&uin="+t.uin+"&v="+o+"&from="+encodeURIComponent(y.referrer())+"&furl="+encodeURIComponent(t.furl)+"&"),r.length&&j(),y},referrer:function(){var e="";try{e=window.top.document.referrer}catch(r){if(window.parent)try{e=window.parent.document.referrer}catch(n){e=""}}return""===e&&(e=document.referrer),e},__onerror__:e.onerror},_=function(e,r){for(var n in r)if(e==r[n])return!0},w=function(){var e="//badjs.vip.qq.com/badjspv?id="+t.id+"&pid="+t.pid+"&v="+o+"&furl="+encodeURIComponent(t.furl);if(1==t.random||v())m(e);else{var r=Math.round(99*Math.random()+1);if(0===t.pvrandom)9==r&&m(e);else{var n=100*t.pvrandom/100;if(n>=1||t.pvrandom<.01)m(e);else{for(var i=100*t.pvrandom,a=[],u=1;u<=i;u++)a.push(u);_(r,a)&&m(e)}}}};return"undefined"!=typeof console&&console.error&&setTimeout(function(){var e=((location.hash||"").match(/([#&])BJ_ERROR=([^&$]+)/)||[])[2];e&&console.error("BJ_ERROR",decodeURIComponent(e).replace(/(:\d+:\d+)\s*/g,"$1\n"))},0),y}(window);"undefined"!=typeof exports&&("undefined"!=typeof module&&module.exports&&(exports=module.exports=BJ_REPORT),exports.BJ_REPORT=BJ_REPORT);</script>
+<script type="text/javascript">BJ_REPORT.init({id:122, furl:'pay.qq.com/h5/index.shtml'});</script>
+<script>!function(e,t){function r(e){return function(t){return Object.prototype.toString.call(t)==="[object "+e+"]"}}function n(){return O++}function a(e){return e.match(j)[0]}function i(e){for(e=e.replace(q,"/");e.match(C);)e=e.replace(C,"/");return e}function s(e){var t=e.length-1,r=e.charAt(t);return"#"===r?e.substring(0,t):".js"===e.substring(t-2)||e.indexOf("?")>0||".css"===e.substring(t-3)||"/"===r?e:e+".js"}function o(e){var t=b.alias;return t&&T(t[e])?t[e]:e}function u(e){var t,r=b.paths;return r&&(t=e.match(I))&&T(r[t[1]])&&(e=r[t[1]]+t[2]),e}function c(e){var t=b.vars;return t&&e.indexOf("{")>-1&&(e=e.replace(G,function(e,r){return T(t[r])?t[r]:e})),e}function f(e){var t=b.map,r=e;if(t)for(var n=0,a=t.length;n<a;n++){var i=t[n];if(r=D(i)?i(e)||e:e.replace(i[0],i[1]),r!==e)break}return r}function l(e,t){var r,n=e.charAt(0);if(B.test(e))r=e;else if("."===n)r=i((t?a(t):b.cwd)+e);else if("/"===n){var s=b.cwd.match($);r=s?s[0]+e.substring(1):e}else r=b.base+e;return r}function d(e,t){if(!e)return"";e=o(e),e=u(e),e=c(e),e=s(e);var r=l(e,t);return r=f(r)}function v(e){return e.hasAttribute?e.src:e.getAttribute("src",4)}function h(e,t,r){var n=M.test(e),a=k.createElement(n?"link":"script");if(r){var i=D(r)?r(e):r;i&&(a.charset=i)}p(a,t,n),n?(a.rel="stylesheet",a.href=e):(a.async=!0,a.src=e),N=a,J?H.insertBefore(a,J):H.appendChild(a),N=null}function p(e,t,r){var n=r&&(W||!("onload"in e));return n?void setTimeout(function(){g(e,t)},1):void(e.onload=e.onerror=e.onreadystatechange=function(){K.test(e.readyState)&&(e.onload=e.onerror=e.onreadystatechange=null,r||b.debug||H.removeChild(e),e=null,t())})}function g(e,t){var r,n=e.sheet;if(W)n&&(r=!0);else if(n)try{n.cssRules&&(r=!0)}catch(a){"NS_ERROR_DOM_SECURITY_ERR"===a.name&&(r=!0)}setTimeout(function(){r?t():g(e,t)},20)}function E(){if(N)return N;if(R&&"interactive"===R.readyState)return R;for(var e=H.getElementsByTagName("script"),t=e.length-1;t>=0;t--){var r=e[t];if("interactive"===r.readyState)return R=r}}function m(e){var t=[];return e.replace(z,"").replace(Y,function(e,r,n){n&&t.push(n)}),t}function y(e,t){this.uri=e,this.dependencies=t||[],this.exports=null,this.status=0,this._waitings={},this._remain=0}if(!e.seajs){var _=e.seajs={version:"2.1.1"},b=_.data={},A=r("Object"),T=r("String"),w=Array.isArray||r("Array"),D=r("Function"),O=0,S=b.events={};_.on=function(e,t){var r=S[e]||(S[e]=[]);return r.push(t),_},_.off=function(e,t){if(!e&&!t)return S=b.events={},_;var r=S[e];if(r)if(t)for(var n=r.length-1;n>=0;n--)r[n]===t&&r.splice(n,1);else delete S[e];return _};var N,R,x,U=_.emit=function(e,t){var r,n=S[e];if(n)for(n=n.slice();r=n.shift();)r(t);return _},j=/[^?#]*\//,q=/\/\.\//g,C=/\/[^\/]+\/\.\.\//,I=/^([^\/:]+)(\/.+)$/,G=/{([^{]+)}/g,B=/^\/\/.|:\//,$=/^.*?\/\/.*?\//,k=document,L=location,X=a(L.href),F=k.getElementsByTagName("script"),P=k.getElementById("seajsnode")||F[F.length-1],V=a(v(P)||X),H=k.getElementsByTagName("head")[0]||k.documentElement,J=H.getElementsByTagName("base")[0],M=/\.css(?:\?|$)/i,K=/^(?:loaded|complete|undefined)$/,W=1*navigator.userAgent.replace(/.*AppleWebKit\/(\d+)\..*/,"$1")<536,Y=/"(?:\\"|[^"])*"|'(?:\\'|[^'])*'|\/\*[\S\s]*?\*\/|\/(?:\\\/|[^\/\r\n])+\/(?=[^\/])|\/\/.*|\.\s*require|(?:^|[^$])\brequire\s*\(\s*(["'])(.+?)\1\s*\)/g,z=/\\\\/g,Q=_.cache={},Z={},ee={},te={},re=y.STATUS={FETCHING:1,SAVED:2,LOADING:3,LOADED:4,EXECUTING:5,EXECUTED:6};y.prototype.resolve=function(){for(var e=this,t=e.dependencies,r=[],n=0,a=t.length;n<a;n++)r[n]=y.resolve(t[n],e.uri);return r},y.prototype.load=function(){var e=this;if(!(e.status>=re.LOADING)){e.status=re.LOADING;var t=e.resolve();U("load",t);for(var r,n=e._remain=t.length,a=0;a<n;a++)r=y.get(t[a]),r.status<re.LOADED?r._waitings[e.uri]=(r._waitings[e.uri]||0)+1:e._remain--;if(0===e._remain)return void e.onload();var i={};for(a=0;a<n;a++)r=Q[t[a]],r.status<re.FETCHING?r.fetch(i):r.status===re.SAVED&&r.load();for(var s in i)i.hasOwnProperty(s)&&i[s]()}},y.prototype.onload=function(){var e=this;e.status=re.LOADED,e.callback&&e.callback();var t,r,n=e._waitings;for(t in n)n.hasOwnProperty(t)&&(r=Q[t],r._remain-=n[t],0===r._remain&&r.onload());delete e._waitings,delete e._remain},y.prototype.fetch=function(e){function t(){h(i.requestUri,i.onRequest,i.charset)}function r(){delete Z[s],ee[s]=!0,x&&(y.save(a,x),x=null);var e,t=te[s];for(delete te[s];e=t.shift();)e.load()}var n=this,a=n.uri;n.status=re.FETCHING;var i={uri:a};U("fetch",i);var s=i.requestUri||a;return!s||ee[s]?void n.load():Z[s]?void te[s].push(n):(Z[s]=!0,te[s]=[n],U("request",i={uri:a,requestUri:s,onRequest:r,charset:b.charset}),void(i.requested||(e?e[i.requestUri]=t:t())))},y.prototype.exec=function(){function e(t){return y.get(e.resolve(t)).exec()}var r=this;if(r.status>=re.EXECUTING)return r.exports;r.status=re.EXECUTING;var a=r.uri;e.resolve=function(e){return y.resolve(e,a)},e.async=function(t,r){return y.use(t,r,a+"_async_"+n()),e};var i=r.factory,s=D(i)?i(e,r.exports={},r):i;return s===t&&(s=r.exports),null!==s||M.test(a)||U("error",r),delete r.factory,r.exports=s,r.status=re.EXECUTED,U("exec",r),s},y.resolve=function(e,t){var r={id:e,refUri:t};return U("resolve",r),r.uri||d(r.id,t)},y.define=function(e,r,n,a){var i=arguments.length;1===i?(n=e,e=t):2===i&&(n=r,w(e)?(r=e,e=t):r=t),!w(r)&&D(n)&&(r=m(n.toString()));var s={id:e,uri:y.resolve(e),deps:r,factory:n,version:a};if(!s.uri&&k.attachEvent){var o=E();o&&(s.uri=o.src)}U("define",s),s.uri?y.save(s.uri,s):x=s},y.save=function(e,t){var r=y.get(e);r.status<re.SAVED&&(r.id=t.id||e,r.dependencies=t.deps||[],r.factory=t.factory,r.status=re.SAVED)},y.get=function(e,t){return Q[e]||(Q[e]=new y(e,t))},y.use=function(t,r,n){var a=y.get(n,w(t)?t:[t]);a.callback=function(){var t=[],n=a.resolve();try{for(var i=0,s=n.length;i<s;i++)t[i]=Q[n[i]].exec()}catch(o){window.BJ_REPORT&&BJ_REPORT.report(o)}r&&r.apply(e,t),delete a.callback},a.load()},y.preload=function(e){var t=b.preload,r=t.length;r?y.use(t,function(){t.splice(0,r),y.preload(e)},b.cwd+"_preload_"+n()):e()},_.use=function(e,t){return y.preload(function(){y.use(e,t,b.cwd+"_use_"+n())}),_},y.define.cmd={},e.define=y.define,_.Module=y,b.fetchedList=ee,b.cid=n,_.resolve=d,_.require=function(e){return(Q[y.resolve(e)]||{}).exports};var ne=/^(.+?\/)(\?\?)?(seajs\/)+/;b.base=(V.match(ne)||["",V])[1],b.dir=V,b.cwd=X,b.charset="utf-8",b.preload=function(){var e=[],t=L.search.replace(/(seajs-\w+)(&|$)/g,"$1=1$2");return t+=" "+k.cookie,t.replace(/(seajs-\w+)=1/g,function(t,r){e.push(r)}),e}(),_.config=function(e){for(var t in e){var r=e[t],n=b[t];if(n&&A(n))for(var a in r)n[a]=r[a];else w(n)?r=n.concat(r):"base"===t&&("/"===r.slice(-1)||(r+="/"),r=l(r)),b[t]=r}return U("config",e),_}}}(this);</script>
+<script type="text/javascript">
+    define.amd = {};
+    seajs.config({
+        base : location.protocol + '//midas.gtimg.cn/midash5/js/',
+        localcache: {
+            manifest: {
+                "channel/c/Components": "458c6a8e",
+                "channel/c/QueryResult": "7e8fa2ae",
+                "channel/game": "ebb089d3",
+                "channel/goods": "2d2b29f1",
+                "channel/handler/abstractHfpay": "90368060",
+                "channel/handler/error": "02dd4e17",
+                "channel/handler/gameHfpay": "cd338dca",
+                "channel/handler/goodsHfpay": "3a579d85",
+                "channel/handler/mcard": "717a7e46",
+                "channel/handler/qdqb": "72d4353f",
+                "channel/handler/qqcard": "ac07476d",
+                "channel/handler/qqwallet": "6d08ed8f",
+                "channel/handler/querywappay": "ed0f8af7",
+                "channel/handler/serviceHfpay": "cecc0eaf",
+                "channel/handler/subscribeHfpay": "90044b1a",
+                "channel/handler/wechat": "d6b13083",
+                "channel/mixins": "b61ebdd8",
+                "channel/pcgame": "ba7c8816",
+                "channel/recharge": "43cbd4ad",
+                "channel/service": "cf78b655",
+                "channel/store/game": "e9d14eb4",
+                "channel/store/goods": "49e7c99d",
+                "channel/store/pcgame": "3930e0ed",
+                "channel/store/recharge": "af70bbcc",
+                "channel/store/service": "24163bcf",
+                "channel/store/subscribe": "2a607918",
+                "channel/subscribe": "5cbc9ac4",
+                "channel/ui": "adc74d61",
+                "channel/view/Game": "369071f9",
+                "channel/view/Goods": "ffed36fc",
+                "channel/view/Pcgame": "5792f064",
+                "channel/view/Recharge": "b973ef9e",
+                "channel/view/Service": "d20cdb7e",
+                "channel/view/Subscribe": "647639f4",
+                "lib/react-dom": "4b00daa3",
+                "lib/react": "cb293be8",
+                "mod/amountModel": "ea63d4f7",
+                "mod/buyMixins": "abded20c",
+                "mod/cascade": "a3b0486f",
+                "mod/cgi": "71d1c4cb",
+                "mod/cgi_pc": "83dd5acf",
+                "mod/config": "4e7aea9f",
+                "mod/pcgames": "c3cc7840",
+                "mod/ptlogin": "9d1da60a",
+                "mod/router": "1ec65d9b",
+                "mod/rsa": "237d144e",
+                "mod/serviceModel": "43f3b384",
+                "mod/serviceParams": "3414e7f3",
+                "mod/services": "cd4d1635",
+                "mod/session": "239abf39",
+                "mod/subscribeParamsCost": "ab7f988b",
+                "mod/ui": "b0cbc55a",
+                "mod/util": "a510a110",
+                "midas/c/Forms": "5f88f60b",
+                "midas/c/Forms2": "c80a4f4e",
+                "midas/c/FriendsList": "8c668156",
+                "midas/c/Game": "56248c5a",
+                "midas/c/GameSuccess": "dc8b9a4f",
+                "midas/c/GoodsSuccess": "91a239cb",
+                "midas/c/PcgameSuccess": "6a12957f",
+                "midas/c/Recharge": "941579e4",
+                "midas/c/RechargeSuccess": "1488f12c",
+                "midas/c/Result": "7a5fa7d6",
+                "midas/c/Service": "2b26106d",
+                "midas/c/ServiceSuccess": "93b46765",
+                "midas/c/Subscribe": "f24f5b5d",
+                "midas/c/SubscribeSuccess": "bf98b18f",
+                "midas/c/TxspSuccess": "c4541eda",
+                "midas/game": "4cdf71cd",
+                "midas/global": "b30de25d",
+                "midas/goods": "a81bfdda",
+                "midas/pcgame": "185dc1a9",
+                "midas/recharge": "e02d0f2d",
+                "midas/service": "6bc019c8",
+                "midas/store/game": "a3cba83b",
+                "midas/store/goods": "691d774e",
+                "midas/store/pcgame": "f909a520",
+                "midas/store/recharge": "8304b70f",
+                "midas/store/service": "0d3b50b9",
+                "midas/store/subscribe": "465e86e7",
+                "midas/subscribe": "0c9c7b4c",
+                "node/dispatcher": "56da186f",
+                "node/flux": "a505d5ba",
+                "node/promise": "9902bbbb",
+                "node/store": "5dc48657"
+            }
+        },
+        combo: {
+            syntax: ["/c/=", ","],
+            dependencies: {
+                "channel/c/Components": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../../mod/config"
+                ],
+                "channel/c/QueryResult": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../ui",
+                    "./Components",
+                    "../../mod/util"
+                ],
+                "channel/game": [
+                    "./store/game",
+                    "./view/Game",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/goods": [
+                    "./store/goods",
+                    "./view/Goods",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/handler/abstractHfpay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../ui",
+                    "../../mod/router",
+                    "../c/Components",
+                    "../c/Components",
+                    "../c/Components",
+                    "../c/Components",
+                    "../../node/promise",
+                    "../c/QueryResult"
+                ],
+                "channel/handler/gameHfpay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "./abstractHfpay",
+                    "../ui",
+                    "../../mod/router"
+                ],
+                "channel/handler/goodsHfpay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "./abstractHfpay"
+                ],
+                "channel/handler/mcard": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/config",
+                    "../c/Components",
+                    "../../mod/util",
+                    "../handler/error",
+                    "../ui",
+                    "../c/QueryResult",
+                    "../../mod/router"
+                ],
+                "channel/handler/qdqb": [
+                    "./error",
+                    "../ui",
+                    "../c/Components",
+                    "../../mod/util",
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/ptlogin",
+                    "../../mod/buyMixins",
+                    "../../mod/session"
+                ],
+                "channel/handler/qqcard": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/config",
+                    "../c/Components",
+                    "./error",
+                    "../../mod/util",
+                    "../ui",
+                    "../../mod/router"
+                ],
+                "channel/handler/qqwallet": [
+                    "../../mod/util",
+                    "../ui"
+                ],
+                "channel/handler/querywappay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../c/QueryResult",
+                    "../../mod/util",
+                    "../ui",
+                    "../c/Components"
+                ],
+                "channel/handler/serviceHfpay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "./abstractHfpay",
+                    "../ui"
+                ],
+                "channel/handler/subscribeHfpay": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../ui",
+                    "./abstractHfpay"
+                ],
+                "channel/handler/wechat": [
+                    "../../mod/util",
+                    "../ui",
+                    "../../node/promise"
+                ],
+                "channel/mixins": [
+                    "../mod/util",
+                    "../mod/config",
+                    "../mod/router"
+                ],
+                "channel/pcgame": [
+                    "./store/pcgame",
+                    "./view/Pcgame",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/recharge": [
+                    "./store/recharge",
+                    "./view/Recharge",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/service": [
+                    "./store/service",
+                    "./view/Service",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/store/game": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../handler/wechat",
+                    "../../mod/session",
+                    "../handler/qqwallet",
+                    "../ui",
+                    "../../mod/config",
+                    "../mixins",
+                    "../../node/promise",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/store/goods": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../handler/wechat",
+                    "../../mod/session",
+                    "../handler/qqwallet",
+                    "../ui",
+                    "../../mod/config",
+                    "../mixins",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/store/pcgame": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../node/promise",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../handler/wechat",
+                    "../handler/qqwallet",
+                    "../../mod/session",
+                    "../ui",
+                    "../../mod/config",
+                    "../mixins",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/store/recharge": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../node/promise",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../handler/wechat",
+                    "../../mod/session",
+                    "../handler/qqwallet",
+                    "../ui",
+                    "../../mod/config",
+                    "../mixins",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/store/service": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../node/promise",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../../mod/serviceParams",
+                    "../handler/wechat",
+                    "../../mod/session",
+                    "../handler/qqwallet",
+                    "../ui",
+                    "../../mod/config",
+                    "../mixins",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/store/subscribe": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../node/promise",
+                    "../../mod/util",
+                    "../../mod/cgi",
+                    "../../mod/ptlogin",
+                    "../../mod/subscribeParamsCost",
+                    "../handler/wechat",
+                    "../handler/qqwallet",
+                    "../ui",
+                    "../../mod/session",
+                    "../../mod/config",
+                    "../mixins",
+                    "../handler/qdqb",
+                    "../handler/wechat",
+                    "../handler/qqwallet"
+                ],
+                "channel/subscribe": [
+                    "./store/subscribe",
+                    "./view/Subscribe",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "channel/ui": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../mod/util",
+                    "./c/Components"
+                ],
+                "channel/view/Game": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/game",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util"
+                ],
+                "channel/view/Goods": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/goods",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util"
+                ],
+                "channel/view/Pcgame": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/pcgame",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util"
+                ],
+                "channel/view/Recharge": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/recharge",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util"
+                ],
+                "channel/view/Service": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/service",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util",
+                    "../../mod/config"
+                ],
+                "channel/view/Subscribe": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../node/dispatcher",
+                    "../store/subscribe",
+                    "../c/Components",
+                    "../ui",
+                    "../../mod/util",
+                    "../../mod/config"
+                ],
+                "lib/react-dom": [
+                    "./react"
+                ],
+                "mod/buyMixins": [
+                    "./util",
+                    "./router",
+                    "./ptlogin",
+                    "./cgi"
+                ],
+                "mod/cgi": [
+                    "./util",
+                    "../channel/ui"
+                ],
+                "mod/ptlogin": [
+                    "./util",
+                    "./session",
+                    "../channel/ui",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "mod/router": [
+                    "./util"
+                ],
+                "mod/serviceModel": [
+                    "./services",
+                    "./util"
+                ],
+                "mod/serviceParams": [
+                    "./services",
+                    "./serviceModel",
+                    "./util"
+                ],
+                "mod/session": [
+                    "./util"
+                ],
+                "mod/subscribeParamsCost": [
+                    "./util"
+                ],
+                "mod/ui": [
+                    "./util",
+                    "../lib/react",
+                    "../lib/react-dom"
+                ],
+                "mod/util": [
+                    "../node/promise"
+                ],
+                "midas/c/Forms": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util"
+                ],
+                "midas/c/Forms2": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util"
+                ],
+                "midas/c/FriendsList": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/ui",
+                    "./Forms"
+                ],
+                "midas/c/Game": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../../node/dispatcher",
+                    "../store/game",
+                    "../../mod/session",
+                    "../../mod/session",
+                    "./Forms2"
+                ],
+                "midas/c/GameSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../store/game",
+                    "../../channel/c/Components"
+                ],
+                "midas/c/GoodsSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "./Result"
+                ],
+                "midas/c/PcgameSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../store/pcgame",
+                    "./Result"
+                ],
+                "midas/c/Recharge": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/session",
+                    "../../node/dispatcher",
+                    "../store/recharge",
+                    "./Forms"
+                ],
+                "midas/c/RechargeSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../store/recharge",
+                    "../../channel/c/Components"
+                ],
+                "midas/c/Result": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "./Forms"
+                ],
+                "midas/c/Service": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../../mod/ui",
+                    "../../mod/session",
+                    "../../node/dispatcher",
+                    "../store/service",
+                    "./Forms",
+                    "./Result",
+                    "./FriendsList"
+                ],
+                "midas/c/ServiceSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/serviceParams",
+                    "../../mod/services",
+                    "./Result",
+                    "../store/service"
+                ],
+                "midas/c/Subscribe": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/session",
+                    "../../node/dispatcher",
+                    "../store/subscribe",
+                    "./Forms",
+                    "./FriendsList",
+                    "./Result"
+                ],
+                "midas/c/SubscribeSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/subscribeParamsCost",
+                    "../store/subscribe",
+                    "../../mod/session",
+                    "./Result",
+                    "./TxspSuccess",
+                    "./Forms"
+                ],
+                "midas/c/TxspSuccess": [
+                    "../../lib/react",
+                    "../../lib/react-dom",
+                    "../../mod/util",
+                    "../../mod/buyMixins",
+                    "../../mod/subscribeParamsCost",
+                    "../store/subscribe"
+                ],
+                "midas/game": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../channel/ui",
+                    "../channel/c/Components",
+                    "../mod/router",
+                    "../mod/util",
+                    "./store/game"
+                ],
+                "midas/global": [
+                    "../mod/util",
+                    "../channel/ui",
+                    "../mod/router",
+                    "../mod/cgi",
+                    "../mod/buyMixins"
+                ],
+                "midas/goods": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../mod/ui",
+                    "../channel/ui",
+                    "./c/Result",
+                    "../mod/router",
+                    "../mod/util",
+                    "./store/goods"
+                ],
+                "midas/pcgame": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../mod/ui",
+                    "./c/Result",
+                    "../mod/router",
+                    "../mod/util",
+                    "./store/pcgame",
+                    "../mod/ptlogin",
+                    "../channel/ui"
+                ],
+                "midas/recharge": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../channel/ui",
+                    "../channel/c/Components",
+                    "../mod/router",
+                    "../mod/util",
+                    "./store/recharge",
+                    "../mod/ptlogin"
+                ],
+                "midas/service": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../mod/router",
+                    "../mod/util",
+                    "../mod/services",
+                    "./store/service",
+                    "../mod/ui"
+                ],
+                "midas/store/game": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/session",
+                    "../../mod/buyMixins",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/router",
+                    "../../mod/cascade",
+                    "../../channel/ui"
+                ],
+                "midas/store/goods": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/session",
+                    "../../mod/buyMixins",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/router"
+                ],
+                "midas/store/pcgame": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/pcgames",
+                    "../../mod/session",
+                    "../../mod/buyMixins",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/router"
+                ],
+                "midas/store/recharge": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/session",
+                    "../../mod/amountModel",
+                    "../../mod/buyMixins",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/ui",
+                    "../../mod/router"
+                ],
+                "midas/store/service": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/session",
+                    "../../mod/amountModel",
+                    "../../mod/buyMixins",
+                    "../../mod/serviceModel",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/ui",
+                    "../../mod/router",
+                    "../../mod/services"
+                ],
+                "midas/store/subscribe": [
+                    "../../node/store",
+                    "../../node/dispatcher",
+                    "../../mod/session",
+                    "../../mod/amountModel",
+                    "../../mod/buyMixins",
+                    "../../mod/cgi",
+                    "../../mod/util",
+                    "../../mod/ui",
+                    "../../mod/router",
+                    "../../mod/subscribeParamsCost",
+                    "../../mod/cascade"
+                ],
+                "midas/subscribe": [
+                    "../lib/react",
+                    "../lib/react-dom",
+                    "../node/dispatcher",
+                    "./global",
+                    "../mod/router",
+                    "../mod/util",
+                    "./store/subscribe",
+                    "../mod/ui",
+                    "../channel/ui"
+                ]
+            }
+        }
+    });
+</script>
+<script>!function(){function e(e){for(var r in e)return!1;return!0}function r(e,n){var t=T[n.replace(d.base,"").replace(".js","")];t&&t.forEach(function(t){var a=seajs.resolve(t,n);if(!~e.indexOf(a)){var s=g.get(a);s.status<p&&!h(a)&&!v(a)&&e.push(a)}r(e,a)})}function n(e){var n=e.length;x.syntax&&(b=x.syntax),x.maxLength&&(O=x.maxLength),x.suffix&&(l=x.suffix),c=x.excludes;for(var t=[],f=0;f<n;f++){var o=e[f];if(!j[o]){var u=g.get(o);u.status<p&&!h(o)&&!v(o)&&(t.push(o),r(t,o))}}t.length>1&&s(a(t))}function t(e){e.requestUri=j[e.uri]||e.uri}function a(e){var r,n,t={};for(r=0,n=e.length;r<n;r++){var a=m.exec(e[r]),s=t[a[1]]=t[a[1]]||[];s.push(a[2])}var f=[];for(r in t)f.push([r,t[r]]);return f}function s(e){for(var r=0,n=e.length;r<n;r++)for(var t=e[r],a=t[0],s=u(t[1]),o=0,i=s.length;o<i;o++)f(a,s[o]);return j}function f(e,r){var n,t,a=[];for(n=0,t=r.length;n<t;n++)a[n]=r[n].replace(/\?.*$/,"");var s=e+b[0]+a.join(b[1]);l&&(s+=l);var u=s.length>O;if(r.length>1&&u){var i=o(r,O-(e+b[0]).length);f(e,i[0]),f(e,i[1])}else{if(u)throw new Error("The combo url is too long: "+s);for(n=0,t=r.length;n<t;n++)j[e+r[n]]=s}}function o(e,r){for(var n=b[1],t=e[0],a=1,s=e.length;a<s;a++)if(t+=n+e[a],t.length>r)return[e.splice(0,a),e]}function u(e){for(var r=[],n={},t=0,a=e.length;t<a;t++){var s=e[t],f=i(s);f&&(n[f]||(n[f]=[])).push(s)}for(var o in n)n.hasOwnProperty(o)&&r.push(n[o]);return r}function i(e){var r=e.lastIndexOf(".");return r>=0?e.substring(r):""}function h(e){if(c)return c.test?c.test(e):c(e)}function v(e){var r=b[0],n=b[1];return r&&e.indexOf(r)>0||n&&e.indexOf(n)>0}var c,l,g=seajs.Module,p=g.STATUS.FETCHING,d=seajs.data,x=d.combo||{},j=x.hash={},b=["??",","],O=2e3,m=/(^(?:https?:)?\/\/[^\/]+)([^\?]+)/,T=x.dependencies||{};if(!e(T)&&!seajs.data.debug&&(seajs.on("load",n),seajs.on("fetch",t),d.test)){var w=seajs.test||(seajs.test={});w.uris2paths=a,w.paths2hash=s}}();</script>
+<script>!function(){if(window.localStorage&&!seajs.data.debug){var e=seajs.Module,t=seajs.data,r=e.prototype.fetch,a=t.combo&&t.combo.syntax||["??",","],n={},o=t.localcache&&t.localcache.manifest||{};for(var s in o)n[seajs.resolve(s)]=o[s];var i={_maxRetry:1,_retry:!0,get:function(e,t){var r;try{r=localStorage.getItem(e)}catch(a){return}return r?t?JSON.parse(r):r:void 0},set:function(e,t,r){r="undefined"==typeof r?this._retry:r;try{localStorage.setItem(e,t)}catch(a){if(r)for(var n=this._maxRetry;n>0;)n--,this.removeAll(),this.set(e,t,!1)}},remove:function(e){try{localStorage.removeItem(e)}catch(t){}},removeAll:function(){for(var e=t.localcache&&t.localcache.prefix||/^https?\:/,r=localStorage.length-1;r>=0;r--){var a=localStorage.key(r);e.test(a)&&(n[a]||localStorage.removeItem(a))}}},c=i.get("manifest",!0)||{};if(n){var l=t.localcache&&t.localcache.validate||function(e,t){return!(!t||!e)},u=function(e,r){function a(t){seajs.emit("request-script-complete",{requestUri:e,error:!0,requestStart:o.getTime(),requestEnd:(new Date).getTime(),status:s.status,statusText:s.statusText,info:t}),s.onreadystatechange=s.ontimeout=s.onerror=s.onabort=n}function n(){}seajs.emit("request-script",{requestUri:e});var o=new Date,s=new window.XMLHttpRequest;s.timeout=t.localcache&&t.localcache.timeout||3e4,s.open("GET",e,!0),s.onreadystatechange=function(){4===s.readyState&&(s.status>=200&&s.status<300||304==s.status?(seajs.emit("request-script-complete",{requestUri:e,error:!1,requestStart:o.getTime(),requestEnd:(new Date).getTime(),status:s.status,statusText:s.statusText,info:"success"}),r(s.responseText)):0!==s.status&&(a(s.statusText),r(null)))},s.ontimeout=function(){a("timeout"),r(null)},s.onerror=function(){a("error"),r(null)},s.onabort=function(){a("abort"),r(null)},s.send(null)},f=function(e,t){if(t&&/\S/.test(t))if(/\.css(?:\?|$)/i.test(e)){var r=document,a=r.createElement("style");r.getElementsByTagName("head")[0].appendChild(a),a.styleSheet?a.styleSheet.cssText=t:a.appendChild(r.createTextNode(t))}else try{t+="//@ sourceURL="+e,(window.execScript||function(e){window.eval.call(window,e)})(t)}catch(n){return window.BJ_REPORT&&BJ_REPORT.report(n),!1}return!0},h=function(e){var t=a[0];return e.indexOf(t)>=0},d=function(e){var t=a,r=e.split(t[0]);if(2!=r.length)return e;var n=r[0],o=r[1].split(t[1]),s={};s.host=n,s.files=[];for(var i=0,c=o.length;i<c;i++)s.files.push(o[i]);return s},v=(t.localcache&&t.localcache.splitCombo||function(e,t,r){for(var a=e.split("define"),n=[],o=0,s=a.length;o<s;o++)a[o]&&n.push("define"+a[o]);return n},{}),g=function(e){var t=v[e];for(delete v[e];m=t.shift();)m.load()};seajs.on("define",function(e){var t=e.id,r=e.uri,a=e.deps,o=e.factory,s=e.version||null;if(n[r]&&"function"==typeof o){var l="'"+a.join("','")+"'";0==a.length&&(l="");var u="define('"+t+"', ["+l+"], "+o.toString()+", '"+s+"');";c[r]=s||n[r],i.set("manifest",JSON.stringify(c)),i.set(r,u)}}),e.prototype.fetch=function(e){var t=this;seajs.emit("fetch",t);var o=t.requestUri||t.uri,s=h(o);if(v[o])return void v[o].push(t);v[o]=[t];var m=function(a){delete v[a],r.call(t,e)};if(!s&&n[o]){var p=i.get(o),y=l(o,p);n[o]==c[o]&&y?f(o,p)?g(o):m(o):u(o+"?max_age=300&v="+Math.random().toString(),function(e){e&&l(o,e)&&f(o,e)?(c[o]=n[o],i.set("manifest",JSON.stringify(c)),i.set(o,e),g(o)):m(o)})}else if(s){for(var S=d(o),w=!1,x=S.files.length-1;x>=0;x--){var T=S.host+S.files[x],p=i.get(T),y=l(T,p);n[T]&&(w=!0,n[T]==c[T]&&y&&(f(T,p),S.files.splice(x,1)))}if(0==S.files.length)return void g(o);if(!w)return void m(o);var q=a,j=S.host+q[0]+S.files.join(q[1]);u(j+"?max_age=300&v="+Math.random().toString(),function(e){f(o,e),g(o)})}else c[o]&&(delete c[o],i.set("manifest",JSON.stringify(c)),i.remove(o)),m(o)}}}}();</script>
+<script type="text/javascript">
+    var _performances = {
+        runJsStart : new Date().getTime()
+    };
+    seajs.on('request-script-complete',function _onComplete(o){
+        _performances.initScript = o;
+        seajs.off('request-script-complete',_onComplete);
+    });
+</script>
+<script type="text/javascript">
+    var mods = ['midas/service'];
+    var isAs1Combo = false;
+    if(/(?:\?|&)as=1(?:&|$|#)/.test(location.href)){
+        isAs1Combo = true;
+        mods.push('channel/service');
+    }else{
+        mods.push('midas/c/Service');
+    }
+    seajs.use(mods, function(obj){
+        if(!obj && isAs1Combo){
+            for(var i in seajs.cache){
+                delete seajs.cache[i];
+            }
+            for(var i in seajs.data.combo.hash){
+                delete seajs.data.combo.hash[i];
+            }
+            seajs.use('midas/service');
+            _reportToLogData('midas_h5.requestJs.Fail');
+        }
+    });
+
+    function _reportToLogData(iformat, _resultInfo){
+        var resultInfo = {};
+        for(var i in _resultInfo){
+            resultInfo[i] = resultInfo[i];
+        }
+        var params = {
+            6 : 10,
+            7 : 0,
+            8 : serializeParam(resultInfo),
+            21 : iformat,
+            36 : location.href.split('#')[0],
+            38 : new Date().getTime(),
+            50 : navigator.userAgent
+        }
+
+        new Image().src = "//api.unipay.qq.com/v1/900/15499/log_data?num=1&record0=" + encodeURIComponent(serializeParam(params, "|")) + "&rr=" + Math.random();
+
+        function serializeParam(obj, join){
+            var result = [];
+            for(var i in obj){
+                result.push(i + "=" + encodeURIComponent(obj[i]));
+            }
+            return result.join(join || "&");
+        }
+    }
+</script>
+</body>
+</html>
