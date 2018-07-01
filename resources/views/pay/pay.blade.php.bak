@@ -26,87 +26,101 @@
     </h1>
 
     <div class="mod-ct">
-
+        <div class="order">
+        </div>
+        <div class="amount" id="money">@if($data['self_money'] == 1)￥{{$data['price']}}@else￥{{$data['real_price']}}@endif</div>
         <div class="common-pay-month">
             <div class="common-pay-list-month">
-                <span class="year-openmonth" data-month="12">请选择您所需要的充值的金额 </span>
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num checked">￥10</li>
-                    <li class="common-pay-input-month-num">￥20</li>
-                    <li class="common-pay-input-month-num">￥50</li>
-                    <li class="common-pay-input-month-num">￥100</li>
-                </ul>
-
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num">￥150</li>
-                    <li class="common-pay-input-month-num">￥200</li>
-                    <li class="common-pay-input-month-num">￥300</li>
-                    <li class="common-pay-input-month-num">￥500</li>
-                </ul>
-
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num">￥600</li>
-                    <li class="common-pay-input-month-num">￥800</li>
-                    <li class="common-pay-input-month-num">￥900</li>
-                    <li class="common-pay-input-month-num">￥1000</li>
+                <span class="year-openmonth" data-month="12">系统发现以下支付金额到账更快 </span>
+                <ul id="_pay_box_month_list_" class="common-pay-select-month common-pay-bgcolor-svip">
+                    <li id="_pay_month_num_1_" data-index="1" class="common-pay-input-month-num checked">￥10</li>
+                    <li id="_pay_month_num_2_" data-index="2" class="common-pay-input-month-num">￥20</li>
+                    <li id="_pay_month_num_3_" data-index="3" class="common-pay-input-month-num">￥50</li>
+                    <li id="_pay_month_num_3_" data-index="3" class="common-pay-input-month-num">￥100</li>
                 </ul>
             </div>
         </div>
+        <div class ="paybtn" style = "display: none;"><a href="{{$data['qrstr']}}" id="alipaybtn" class="btn btn-primary" target="_blank">启动支付宝App支付</a></div>
+        <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+            <div data-role="qrPayImg" class="qrcode-img-area">
+                <div class="ui-loading qrcode-loading" data-role="qrPayImgLoading" style="display: none;"></div>
+                <div style="position: relative;display: inline-block;">
+                    <img  id="show_qrcode" width="300" height="210" src="https://pan.baidu.com/share/qrcode?w=210&h=210&url={{$data['qrstr']}}" style="display: block;">
+                    @if($data['pay_type'] == 1)
+                    <img onclick="$('#use').hide()" id="use" src="@if($api_config['view_logo']){{ \Illuminate\Support\Facades\Config::get('global.qiniu_url')."/".$api_config['view_logo'] }}@else{{ \Illuminate\Support\Facades\URL::asset('/pay_source/logo_alipay.png') }}@endif"
+                         style="position: absolute;top: 50%;left: 50%;width:32px;height:32px;margin-left: -16px;margin-top: -20px;border-radius: 50%;">
+                    @endif
+                    @if($data['pay_type'] == 2)
+                        <img onclick="$('#use').hide()" id="use" src="@if($api_config['view_logo']){{ \Illuminate\Support\Facades\Config::get('global.qiniu_url')."/".$api_config['view_logo'] }}@else{{ \Illuminate\Support\Facades\URL::asset('/pay_source/logo_weixin.png') }}@endif"
+                             style="position: absolute;top: 50%;left: 50%;width:32px;height:32px;margin-left: -16px;margin-top: -20px;border-radius: 50%;">
+                    @endif
 
-    </div>
+                    <div id="qrcode" style = "display: none;"></div>
+                    <canvas id="imgCanvas" width="310" height="270" style = "display: none;"></canvas>
+                </div>
+            </div>
 
-    <div class="mod-ct">
 
-        <div class="common-pay-month">
-            <div class="common-pay-list-month">
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num checked">￥1200</li>
-                    <li class="common-pay-input-month-num">￥1500</li>
-                    <li class="common-pay-input-month-num">￥2000</li>
-                    <li class="common-pay-input-month-num">￥2500</li>
-                </ul>
+        </div>
+        <div class ="payweixinbtn" style = "display: none;"><a href="https://pay.paysapi.com/get_code_image?url={{$data['qrstr']}}" target="_blank" id="downloadbtn" class="btn btn-primary">1.先保存二维码到手机</a></div>
 
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num">￥3000</li>
-                    <li class="common-pay-input-month-num">￥4000</li>
-                    <li class="common-pay-input-month-num">￥5000</li>
-                    <li class="common-pay-input-month-num">￥6000</li>
-                </ul>
+        <div class ="payweixinbtn" style = "display: none;padding-top: 10px"><a href="weixin://" class="btn btn-primary">2.打开微信，扫一扫本地图片</a></div>
 
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num">￥7000</li>
-                    <li class="common-pay-input-month-num">￥8000</li>
-                    <li class="common-pay-input-month-num">￥9000</li>
-                    <li class="common-pay-input-month-num">￥10000</li>
-                </ul>
+        <div class ="iospayweixinbtn" style = "display: none;">1.长按上面的图片然后"存储图像"</div>
+        <div class ="iospayweixinbtn" style = "display: none;padding-top: 10px"><a href="weixin://scanqrcode" class="btn btn-primary">2.打开微信，扫一扫本地图片</a></div>
+
+
+        <div class="time-item" style = "padding-top: 10px">
+            @if($api_config['view_company'])
+               <div class="time-item" id="view_company"><h1>收款方:{{$api_config['view_company']}}</h1> </div>
+            @endif
+            <div class="time-item" id="msg"><h1>付款即时到账 未到账可联系我们</h1> </div>
+            <div class="time-item"><h1>订单:{{$data['order_id']}}</h1> </div>
+            <strong id="hour_show">0时</strong>
+            <strong id="minute_show">0分</strong>
+            <strong id="second_show">0秒</strong>
+        </div>
+
+        <div class="tip">
+            <div class="ico-scan"></div>
+            <div class="tip-text">
+                <p id="showtext">打开{{\Illuminate\Support\Facades\Config::get('global.pay_type')[$data['pay_type']]}} [扫一扫]</p>
             </div>
         </div>
 
-    </div>
 
+        <!--
+        <div class="tip-text">
+        </div>
 
-    <div class="mod-ct">
-
-        <div class="common-pay-month">
-            <div class="common-pay-list-month">
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num checked">￥15000</li>
-                    <li class="common-pay-input-month-num">￥20000</li>
-                    <li class="common-pay-input-month-num">￥40000</li>
-                    <li class="common-pay-input-month-num">￥50000</li>
-                </ul>
-
-                <ul class="common-pay-select-month common-pay-bgcolor-svip">
-                    <li class="common-pay-input-month-num">￥60000</li>
-                    <li class="common-pay-input-month-num">￥80000</li>
-                    <li class="common-pay-input-month-num">￥90000</li>
-                    <li class="common-pay-input-month-num">￥100000</li>
-                </ul>
+        <div class="shadow" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9999; background: rgb(0, 0, 0); opacity: 0.8;"></div>
+        <div class="fusion-pm-fl-wrapper" style="position: fixed; z-index: 9999; left: 5%; top: 50%; width: 90%; transform: translate(0px, -50%);">
+            <div class="fusion-pm-bd">
+                <div class="fusion-pm-hd">
+                    <h1 class="fpm-hd-tit">提示</h1>
+                </div>
+                <div class="fpm-item">
+                    <div class="fpm-hint-box">
+                        <p class="fpm-hint">请在微信内完成支付</p>
+                    </div>
+                </div>
+                <div class="fpm-item">
+                    <p class="fpm-btn-wrap"><button type="button" class="fpm-btn fpm-primary">已完成支付</button><button class="fpm-btn fpm-default">未完成支付</button></p>
+                </div>
             </div>
         </div>
 
-    </div>
+        -->
 
+        
+    </div>
+    <div class="foot">
+        <div class="inner" style="display:block;">
+            <p>手机用户可保存上方二维码到手机中</p>
+            <p>在{{\Illuminate\Support\Facades\Config::get('global.pay_type')[$data['pay_type']]}}扫一扫中选择“相册”即可</p>
+            <p></p>
+        </div>
+    </div>
 
 
 </div>

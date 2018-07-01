@@ -464,7 +464,7 @@ h1 {
 }
 .common-pay-month .common-pay-select-month li {
     position: relative;
-    width: 18%;
+    width: 20%;
     height: 28px;
     line-height: 28px;
     border-radius: 2px;
@@ -475,9 +475,10 @@ h1 {
 }
 .year-openmonth {
     display: block;
-    color: #fdb500;
+    color: #01a9f4;
     height: auto;
-    padding: 12px 0px;
+    padding: 20px 0px 12px 0px;
+    font-size: 15px;
 }
 
 .fusion-pm-fl-wrapper {
@@ -611,4 +612,7 @@ h1 {
     line-height: 4.4rem;
     border-radius: 3px;
     font-size: 1.6rem;
+}
+.common-pay-select-month{
+    padding: 15px 0px;
 }
